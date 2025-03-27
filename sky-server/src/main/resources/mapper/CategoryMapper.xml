@@ -26,13 +26,26 @@
         </set>
         WHERE id = #{id}
     </update>
-    <select id="pageQuery" resultType="com.sky.entity.Employee">
+    <select id="pageQuery" resultType="com.sky.entity.Category">
         select * from category
         <where>
             <if test="name!= null and name!= ''">
                 and name like concat('%', #{name}, '%')
             </if>
+            <if test="type != null">
+                and type = #{type}
+
+            </if>
         </where>
         order by create_time desc
+    </select>
+    <select id="list" resultType="com.sky.entity.Category">
+        select * from category
+        <where>
+            <if test="type!= null">
+                type = #{type}
+            </if>
+        </where>
+        order by sort desc
     </select>
 </mapper>
