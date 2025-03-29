@@ -40,6 +40,10 @@ public class CategoryServiceImpl implements CategoryService {
     public void save(CategoryDTO categoryDTO) {
         Category category = new Category();
         BeanUtils.copyProperties(categoryDTO, category); //把categoryDTO中的属性拷贝到category中
+        //category.setCreateTime(LocalDateTime.now());
+        //category.setUpdateTime(LocalDateTime.now());
+        //category.setCreateUser(BaseContext.getCurrentId());
+        //category.setUpdateUser(BaseContext.getCurrentId());
         categoryMapper.insert(category);
     }
 
@@ -53,7 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
     public PageResult pageQuery(CategoryPageQueryDTO categoryPageQueryDTO) {
         //开始分页查询（用pagehelper）
         PageHelper.startPage(categoryPageQueryDTO.getPage(),categoryPageQueryDTO.getPageSize());
-        Page<Employee> page =  categoryMapper.pageQuery(categoryPageQueryDTO);
+        Page<Category> page =  categoryMapper.pageQuery(categoryPageQueryDTO);
         return new PageResult(page.getTotal(),page.getResult());
     }
 
@@ -62,8 +66,8 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = new Category();
         category.setStatus(status);
         category.setId(id);
-        category.setUpdateTime(LocalDateTime.now());
-        category.setUpdateUser(BaseContext.getCurrentId());
+        //category.setUpdateTime(LocalDateTime.now());
+        //category.setUpdateUser(BaseContext.getCurrentId());
         categoryMapper.update(category);
     }
 
@@ -92,8 +96,8 @@ public class CategoryServiceImpl implements CategoryService {
         // 将categoryDTO中的属性拷贝到category中
         BeanUtils.copyProperties(categoryDTO, category);
         // 设置修改时间和修改人
-        category.setUpdateTime(LocalDateTime.now());
-        category.setUpdateUser(BaseContext.getCurrentId());
+        //category.setUpdateTime(LocalDateTime.now());
+        //category.setUpdateUser(BaseContext.getCurrentId());
         categoryMapper.update(category);
     }
 
