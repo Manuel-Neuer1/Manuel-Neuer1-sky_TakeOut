@@ -38,7 +38,7 @@ public class AutoFillAspect {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature(); //方法签名对象
         AutoFill autoFill = signature.getMethod().getAnnotation(AutoFill.class); //获得方法上的注解对象
         OperationType operationType = autoFill.value(); //获得注解对象中的数据库操作类型
-        //获取到当前被拦截的方法的参数--实体对象
+        //获取到当前被拦截的方法的参数--实体对象（Employee对象、Category对象）
         Object[] args = joinPoint.getArgs();
         //判断参数是否为空
         if (args == null || args.length == 0) {
@@ -59,7 +59,7 @@ public class AutoFillAspect {
                 Method setUpdateUser = entity.getClass().getDeclaredMethod("setUpdateUser", Long.class);
                 //Method setCreateUser = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_CREATE_USER, Long.class);
 
-                //通过反射为对象的属性赋值
+                //通过反射为对象的属性赋值 Method.invoke(类的对象，参数)
                 setCreateTime.invoke(entity, now);
                 setCreateUser.invoke(entity, currentId);
                 setUpdateTime.invoke(entity, now);
