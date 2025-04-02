@@ -1,6 +1,11 @@
 package com.sky.mapper;
 
+import com.sky.annotation.AutoFill;
+import com.sky.entity.Dish;
+import com.sky.enumeration.OperationType;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 @Mapper
@@ -14,4 +19,10 @@ public interface DishMapper {
      */
     @Select("select count(id) from dish where category_id = #{id}")
     Integer countByCategoryId(Long categoryId);
+
+    @AutoFill(value = OperationType.INSERT)
+    @Insert("insert into dish(name, category_id, price, image, description, status, create_time, update_time, create_user, update_user) " +
+            "values (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})")
+    @Options(useGeneratedKeys = true, keyProperty = "id") //useGeneratedKeys = true：告诉 MyBatis 使用数据库自动生成的主键。keyProperty = "id"：指定将生成的主键值赋值给实体对象中的哪个字段。
+    void insert(Dish dish);
 }
