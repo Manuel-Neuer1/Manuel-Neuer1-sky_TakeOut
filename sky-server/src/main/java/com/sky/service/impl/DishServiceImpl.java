@@ -10,10 +10,7 @@ import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.entity.Employee;
 import com.sky.exception.DeletionNotAllowedException;
-import com.sky.mapper.CategoryMapper;
-import com.sky.mapper.DishFlavorMapper;
-import com.sky.mapper.DishMapper;
-import com.sky.mapper.EmployeeMapper;
+import com.sky.mapper.*;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -32,7 +29,7 @@ public class DishServiceImpl implements DishService {
     @Autowired
     private DishFlavorMapper dishFlavorMapper;
     @Autowired
-    private CategoryMapper categoryMapper;
+    private SetmealDishMapper setmealDishMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -63,6 +60,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteBatch(List<Long> ids) {
         //判断当前菜品是否能够删除---是否起售中
         for (Long id : ids) {
@@ -73,10 +71,16 @@ public class DishServiceImpl implements DishService {
             }
         }
         //判断当前菜品是否能够删除---是否被套餐关联
+        List<Long> setmealIds = setmealDishMapper.getSetmealDishBySetmealId(ids);
+        if(setmealIds != null && setmealIds.size() > 0) {
+            //当前菜品被套餐关联，不能删除
+            throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+        }
 
-        //删除菜品表中得菜品数据
-
+        //删除菜品表中的菜品数据
+        dishMapper.deleteBatch(ids);
         //删除菜品关联得口味数据
+        dishFlavorMapper.deleteByDishIds(ids);
 
     }
 }
