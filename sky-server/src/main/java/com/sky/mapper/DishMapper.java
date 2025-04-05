@@ -42,4 +42,7 @@ public interface DishMapper {
     Dish getById(Long id);
 
     void deleteBatch(List<Long> ids);
+
+    @AutoFill(value = OperationType.INSERT)
+    void update(Dish dish);
 }
