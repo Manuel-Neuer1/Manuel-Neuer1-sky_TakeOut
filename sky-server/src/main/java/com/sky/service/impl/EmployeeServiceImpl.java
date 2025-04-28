@@ -37,6 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return
      */
     public Employee login(EmployeeLoginDTO employeeLoginDTO) {
+        // 获取前端登录界面传来的DTO对象中的属性：username password
         String username = employeeLoginDTO.getUsername();
         String password = employeeLoginDTO.getPassword();
 
@@ -51,7 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //密码比对
         // TODO 后期需要进行md5加密，然后再进行比对
-        //对前端传过来的密码进行md5加密处理
+        //对前端传过来的密码进行md5加密处理（数据库中的密码都是以md5加密后的内容存储，不存放明文）
         password = DigestUtils.md5DigestAsHex(password.getBytes());
 
         if (!password.equals(employee.getPassword())) {
@@ -96,7 +97,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
-        //开始分页查询（用pagehelper）
+        // 开始分页查询（用pagehelper）
+        // 当前页码（pageNum）、每页记录数（pageSize）、总记录数（total）、总页数（pages）
+        // 这里用的是 startPage(pageNum, pageSize)  EmployeePageQueryDTO：name page（页码） pageSize
+        // 根据传入的页码和页面大小设置分页参数 这个方法必须在执行查询操作之前调用
         PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize());
 
         Page<Employee> page =  employeeMapper.pageQuery(employeePageQueryDTO);

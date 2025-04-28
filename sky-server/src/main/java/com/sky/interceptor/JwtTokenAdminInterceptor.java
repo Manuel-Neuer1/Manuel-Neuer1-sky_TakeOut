@@ -26,14 +26,17 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
     /**
      * 校验jwt
      *
-     * @param request
-     * @param response
-     * @param handler
+     * @param request 当前的HTTP请求对象，从中可以获取请求头、请求方法、请求路径等信息
+     * @param response 在执行完相应操作后用于构建HTTP响应对象，用于向客户端发送响应信息，如响应状态码、响应体等
+     * @param handler 当前处理器，用于判断当前拦截到的是Controller的方法还是其他资源
      * @return
      * @throws Exception
      */
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //判断当前拦截到的是Controller的方法还是其他资源
+        /*
+        * 在Spring MVC中，动态方法通常指的是控制器类（@Controller或@RestController注解的类）中被请求映射注解（如@RequestMapping、@GetMapping、@PostMapping等）标注的方法。
+        * */
         if (!(handler instanceof HandlerMethod)) {
             //当前拦截到的不是动态方法，直接放行
             return true;
@@ -44,7 +47,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
 
         //2、校验令牌
         try {
-            log.info("jwt校验:{}", token);
+            log.info("jwt令牌校验：{}", token);
             Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
             Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
             log.info("当前员工id：{}", empId);

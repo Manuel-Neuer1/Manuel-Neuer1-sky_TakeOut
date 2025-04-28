@@ -45,4 +45,7 @@ public interface DishMapper {
 
     @AutoFill(value = OperationType.INSERT)
     void update(Dish dish);
+
+    @Select("select * from dish where category_id = #{categoryId}")
+    List<Dish> list(Dish dish);
 }

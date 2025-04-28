@@ -45,10 +45,12 @@ public class EmployeeController {
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
         log.info("员工登录：{}", employeeLoginDTO);
 
-        Employee employee = employeeService.login(employeeLoginDTO);
+        //调用Service层方法来实现登录
+        Employee employee = employeeService.login(employeeLoginDTO); //employeeLoginDTO: username password
 
-        //登录成功后，生成jwt令牌
+        //没有抛出异常说明登录成功，接下来生成jwt令牌
         Map<String, Object> claims = new HashMap<>();
+        // empId ：当前登录的员工id
         claims.put(JwtClaimsConstant.EMP_ID, employee.getId());
         String token = JwtUtil.createJWT(
                 jwtProperties.getAdminSecretKey(),
@@ -66,7 +68,7 @@ public class EmployeeController {
     }
 
     /**
-     * 退出
+     * 退出登录
      *
      * @return
      */
@@ -85,7 +87,7 @@ public class EmployeeController {
     @PostMapping()
     @ApiOperation(value = "新增员工")
     public Result<String> save(@RequestBody EmployeeDTO employeeDTO) {
-        log.info("新增员工：{}", employeeDTO);
+        log.info("新增员工：{}", employeeDTO); //employeeDTO: id username name phone sex idNumber
         //调用Service层方法来保存员工数据
         employeeService.save(employeeDTO);
         return Result.success();
