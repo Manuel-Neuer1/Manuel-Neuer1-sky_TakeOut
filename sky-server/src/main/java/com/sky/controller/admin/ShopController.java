@@ -29,7 +29,8 @@ public class ShopController {
     @ApiOperation("获取店铺营业状态")
     public Result<Integer> getStatus() {
         log.info("获取店铺营业状态");
-        Integer status = Integer.valueOf(redisTemplate.opsForValue().get("SHOP_STATUS").toString());
+        Integer status = Integer.parseInt(redisTemplate.opsForValue().get("SHOP_STATUS").toString());
+        log.info("获取到店铺的营业状态为：{}", status.equals(1) ? "营业中":"打烊中");
         return Result.success(status);
     }
 }
