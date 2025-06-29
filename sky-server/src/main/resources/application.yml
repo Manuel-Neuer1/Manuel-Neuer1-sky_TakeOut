@@ -28,6 +28,8 @@ mybatis:
 
 logging:
   level:
+    org.springframework.web: DEBUG
+    org.springframework.web.servlet.mvc.method.annotation: DEBUG
     com:
       sky:
         mapper: debug

@@ -29,18 +29,20 @@ public class DishController {
 
     /**
      * 根据分类id查询菜品
+     *
      * @param categoryId
      * @return
      */
-    @GetMapping("list") //有PathQuery
-    @ApiOperation("根据id查询菜品")
+    @GetMapping("/list")
+    @ApiOperation("根据分类id查询菜品")
     public Result<List<DishVO>> list(Long categoryId) {
-        log.info("根据category:{} 查询菜品",categoryId);
+        log.info("根据分类id查询菜品：{}", categoryId);
         Dish dish = new Dish();
         dish.setCategoryId(categoryId);
-        //查询起售中的菜品
-        dish.setStatus(StatusConstant.ENABLE);
+        dish.setStatus(StatusConstant.ENABLE);//查询起售中的菜品
+
         List<DishVO> list = dishService.listWithFlavor(dish);
+
         return Result.success(list);
     }
 }

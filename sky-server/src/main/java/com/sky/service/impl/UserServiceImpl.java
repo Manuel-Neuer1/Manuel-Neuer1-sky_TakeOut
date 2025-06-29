@@ -60,7 +60,13 @@ public class UserServiceImpl implements UserService {
                     .createTime(LocalDateTime.now())
                     .build();
         }
-        userMapper.insert(user);
+        try {
+            userMapper.insert(user);
+        } catch (Exception e) {
+            log.error("用户插入失败");
+            //throw new LoginFailedException(MessageConstant.LOGIN_FAILED);
+            e.printStackTrace();
+        }
         // 返回这个用户对象
         return user;
     }
